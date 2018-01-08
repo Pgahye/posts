@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Bridge pattern</title>
+  <meta name="description" content="연구내용 Bridge 패턴 - 기능의 계층과 구현의 계층을 분리한다. 기능의 클래스 계층(추상화 부분)과 구현 클래스 계층을 분리하여 각자 독립적으로 변형할 수 있는 패턴이다. 기능과 구현을 각각 정의한 후, 구현에 관련된 클래스를 기능 클래스가 포함하는 구조이다. 기능과 구현이 ...">
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://blog.hibrainapps.net/Bridge-pattern">
+  <link rel="alternate" type="application/rss+xml" title="하이브레인넷 부설연구소" href="/feed.xml">
+  
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-18071244-5', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  
+
+  
+
+
+  
+
+
+
+
+
+
+
+</head>
+
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper">
+    
+    
+    <a class="site-title" href="/">하이브레인넷 부설연구소</a>
+  
+    
+      <nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger">
+          
+            
+	    
+	    	
+            
+          
+            
+	    
+	    	
+            
+		 	
+            <a class="page-link" href="/about/">About</a>
+           
+            
+	  
+          
+            
+	    
+	    	
+            
+		 	
+            <a class="page-link" href="/category/">category</a>
+           
+            
+	  
+          
+            
+	    
+	    	
+            
+          
+            
+	    
+	    	
+            
+          
+            
+	    
+	    	
+            
+		 	
+            <a class="page-link" href="/tags/">tags</a>
+           
+            
+	  
+          
+            
+	    
+	    	
+            
+          
+            
+	    
+	    	
+            
+		
+	  
+          
+            
+	    
+	    	
+            
+          
+            
+	    
+	    	
+            
+		
+	  
+          
+            
+	    
+	    	
+            
+		
+	  
+          
+            
+	    
+	    	
+            
+		
+	  
+          
+            
+	    
+	    	
+            
+          
+            
+	    
+	    	
+            
+          
+            
+	    
+	    	
+            
+          
+            
+	    
+	    	
+            
+          
+        </div>
+      </nav>
+    
+  </div>
+</header>
+
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Bridge pattern</h1>
+    <p class="post-meta">
+      <time datetime="2017-12-22T08:58:11+00:00" itemprop="datePublished">
+        
+        Dec 22, 2017
+      </time>
+      
+        • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">gh.park</span></span>
+      </p>
+
+tag: 
+<span>[
+  
+    
+  <a href="/tags/연구노트"><code class=""><nobr>연구노트</nobr></code>&nbsp;</a>
+  
+    
+  <a href="/tags/인턴십"><code class=""><nobr>인턴십</nobr></code>&nbsp;</a>
+  
+    
+  <a href="/tags/javapattern"><code class=""><nobr>javapattern</nobr></code>&nbsp;</a>
+  
+]</span>
+
+<br>
+category : 
+<span>[
+  
+    
+   <a href="/category/디자인패턴"><code class=""><nobr>디자인패턴</nobr></code>&nbsp;</a>
+  
+]</span>
+
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <h3 id="연구내용">연구내용</h3>
+
+<h4 id="bridge-패턴---기능의-계층과-구현의-계층을-분리한다">Bridge 패턴 - 기능의 계층과 구현의 계층을 분리한다.</h4>
+<p>기능의 클래스 계층(추상화 부분)과 구현 클래스 계층을 분리하여 각자 독립적으로 변형할 수 있는 패턴이다.</p>
+
+<p>기능과 구현을 각각 정의한 후, 구현에 관련된 클래스를 기능 클래스가 포함하는 구조이다.</p>
+
+<p>기능과 구현이 분리된 것을 알 수 있고, 구현을 숨길수 있다는 장점이 있다.</p>
+
+<p>예) 입력된 문자열을 출력해주는 프로그램이다.</p>
+
+<p>hello, korea라는 문자열을</p>
+
+<p>+————+
+<br />
+:Hello, korea:
+<br />
++————+</p>
+
+<p>위와 같은 형식으로 출력해준다.</p>
+
+<p>다음과 같이 원하는 횟수만큼 출력도 할 수 있다.</p>
+
+<p>+—————-+
+<br />
+:Hello, Universe.:
+<br />
+:Hello, Universe.:
+<br />
+:Hello, Universe.:
+<br />
+:Hello, Universe.:
+<br />
+:Hello, Universe.:
+<br />
++—————-+</p>
+
+<p><img src="http://image.fileslink.com/491415f678ebf81/image2017-12-14_16-13-1.png" alt="1" />
+<img src="http://image.fileslink.com/491415f691939ab/image2017-12-13_18-27-26.png" alt="2" /></p>
+
+<h5 id="display-클래스-표시하는-기능을-나타냄">Display 클래스 (표시하는 기능을 나타냄) </h5>
+<p>추상적인 무언가를 표시하기 위한 것으로, 기능의 클래스의 최상위에 있는 클래스이다. </p>
+
+<p>impl필드는 클래스의 구현을 나타내기 위한 인스턴스이다. </p>
+
+<p>Display 의 생성자에게 구현을 나타내는 클래스의 인스턴스를 넘겨줌으로써, 처리된다. </p>
+
+<p>이 필드가 구현과 기능 클래스 계층사이의 다리 역할을 수행한다. </p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Display</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">DisplayImpl</span> <span class="n">impl</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">Display</span><span class="o">(</span><span class="n">DisplayImpl</span> <span class="n">impl</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">impl</span> <span class="o">=</span> <span class="n">impl</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">open</span><span class="o">()</span> <span class="o">{</span>        <span class="c1">// 표시하기 전처리 단계</span>
+        <span class="n">impl</span><span class="o">.</span><span class="na">rawOpen</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">print</span><span class="o">()</span> <span class="o">{</span>        <span class="c1">// 표시</span>
+        <span class="n">impl</span><span class="o">.</span><span class="na">rawPrint</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">close</span><span class="o">()</span> <span class="o">{</span>        <span class="c1">// 표시 후처리</span>
+        <span class="n">impl</span><span class="o">.</span><span class="na">rawClose</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">final</span> <span class="kt">void</span> <span class="nf">display</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">open</span><span class="o">();</span>
+        <span class="n">print</span><span class="o">();</span>
+        <span class="n">close</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<h5 id="countdisplay-클래스지정횟수만큼-표시한다라는-기능을-나타냄">CountDisplay 클래스(지정횟수만큼 표시한다라는 기능을 나타냄)</h5>
+<p>Display클래스에 기능을 추가한 클래스이다. Display 클래스로부터 상속받은 메소드를 사용해서 새로운 메소드를 추가하고 있다. </p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CountDisplay</span> <span class="kd">extends</span> <span class="n">Display</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nf">CountDisplay</span><span class="o">(</span><span class="n">DisplayImpl</span> <span class="n">impl</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">impl</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">multiDisplay</span><span class="o">(</span><span class="kt">int</span> <span class="n">times</span><span class="o">)</span> <span class="o">{</span>        <span class="c1">// times번 반복하여 표시한다.</span>
+        <span class="n">open</span><span class="o">();</span>
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">times</span><span class="o">;</span> <span class="n">i</span><span class="o">++</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="n">print</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="n">close</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<h5 id="displayimpl-클래스">DisplayImpl 클래스</h5>
+
+<p>구현의 클래스 계층의 최상위로,Display 클래스의 open, print, close에 대응하는 rawOpen, rawPrint, rawClose 메소드를 가지고 있다.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">DisplayImpl</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">abstract</span> <span class="kt">void</span> <span class="nf">rawOpen</span><span class="o">();</span>
+    <span class="kd">public</span> <span class="kd">abstract</span> <span class="kt">void</span> <span class="nf">rawPrint</span><span class="o">();</span>
+    <span class="kd">public</span> <span class="kd">abstract</span> <span class="kt">void</span> <span class="nf">rawClose</span><span class="o">();</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<h5 id="stringdisplayimpl-클래스">StringDisplayImpl 클래스</h5>
+<p>실제로 문자열 표시를 구현하고 있는 클래스</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringDisplayImpl</span> <span class="kd">extends</span> <span class="n">DisplayImpl</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">string</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">width</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">StringDisplayImpl</span><span class="o">(</span><span class="n">String</span> <span class="n">string</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">width</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="na">getBytes</span><span class="o">().</span><span class="na">length</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">rawOpen</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">printLine</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">rawPrint</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">":"</span> <span class="o">+</span> <span class="n">string</span> <span class="o">+</span> <span class="s">":"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">rawClose</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">printLine</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">printLine</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"+"</span><span class="o">);</span>
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">width</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"-"</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"+"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<h5 id="main-클래스">Main 클래스</h5>
+<p>변수 d1에는 Display 클래스의 인스턴스를 대입, d2,d3에는 CountDisplay 클래스의 인스턴스를 대입하고 있다. (기능)  </p>
+
+<p>둘다 구현은 StringDisplayImpl  클래스의 인스턴스가 담당하고 있다. </p>
+
+<p>d1,d2,d3 모두 Display 클래스의 인스턴스의 일종이기 때문에 display 메소드를 호출할수 있으며, d3는 추가적으로 multiDisplay메소드도 호출할 수 있다. </p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Main</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Display</span> <span class="n">d1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Display</span><span class="o">(</span><span class="k">new</span> <span class="n">StringDisplayImpl</span><span class="o">(</span><span class="s">"Hello, korea"</span><span class="o">));</span>
+        <span class="n">Display</span> <span class="n">d2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CountDisplay</span><span class="o">(</span><span class="k">new</span> <span class="n">StringDisplayImpl</span><span class="o">(</span><span class="s">"Hello, world"</span><span class="o">));</span>
+        <span class="n">CountDisplay</span> <span class="n">d3</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CountDisplay</span><span class="o">(</span><span class="k">new</span> <span class="n">StringDisplayImpl</span><span class="o">(</span><span class="s">"Hello, Universe."</span><span class="o">));</span>
+        <span class="n">d1</span><span class="o">.</span><span class="na">display</span><span class="o">();</span>
+        <span class="n">d2</span><span class="o">.</span><span class="na">display</span><span class="o">();</span>
+        <span class="n">d3</span><span class="o">.</span><span class="na">display</span><span class="o">();</span>
+        <span class="n">d3</span><span class="o">.</span><span class="na">multiDisplay</span><span class="o">(</span><span class="mi">5</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+
+<span class="c1">// 실행 결과</span>
+
+<span class="o">+------------+</span>
+<span class="o">:</span><span class="n">Hello</span><span class="o">,</span> <span class="nl">korea:</span>
+<span class="o">+------------+</span>
+<span class="o">+------------+</span>
+<span class="o">:</span><span class="n">Hello</span><span class="o">,</span> <span class="nl">world:</span>
+<span class="o">+------------+</span>
+<span class="o">+----------------+</span>
+<span class="o">:</span><span class="n">Hello</span><span class="o">,</span> <span class="n">Universe</span><span class="o">.:</span>
+<span class="o">+----------------+</span>
+<span class="o">+----------------+</span>
+<span class="o">:</span><span class="n">Hello</span><span class="o">,</span> <span class="n">Universe</span><span class="o">.:</span>
+<span class="o">:</span><span class="n">Hello</span><span class="o">,</span> <span class="n">Universe</span><span class="o">.:</span>
+<span class="o">:</span><span class="n">Hello</span><span class="o">,</span> <span class="n">Universe</span><span class="o">.:</span>
+<span class="o">:</span><span class="n">Hello</span><span class="o">,</span> <span class="n">Universe</span><span class="o">.:</span>
+<span class="o">:</span><span class="n">Hello</span><span class="o">,</span> <span class="n">Universe</span><span class="o">.:</span>
+<span class="o">+----------------+</span>
+
+</code></pre></div></div>
+
+<p>bridge 패턴은 기능의 클래스 계층과 구현의 클래스 계층을 분리했기 때문에, 각각 클래스 계층을 독립적으로 확장 할 수 있다. </p>
+
+<p>예를 들어, 기능을 추가하고 싶으면 기능 클래스 계층에만 추가를 하면되고 , 구현 클래스 계층을 수정할 필요가 전혀 없다. </p>
+
+<p>또한 새로 추가한 기능은 모든 구현에서 사용할 수 있다. </p>
+
+<p>예) OS( Window판, Macintosh판, UNIX판) </p>
+
+<h3 id="참고자료">참고자료</h3>
+<ul>
+  <li><a href=" http://showmiso.tistory.com/121 ">디자인패턴 Bridge 패턴</a></li>
+  <li>[Java 언어로 배우는 디자인 패턴 입문 , 영진닷컴]</li>
+</ul>
+
+  </div>
+
+  
+</article>
+
+
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">하이브레인넷 부설연구소</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>
+            
+              하이브레인넷 부설연구소
+            
+            </li>
+            
+            <li><a href="mailto:apps@hibrain.net">apps@hibrain.net</a></li>
+            
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p></p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>
